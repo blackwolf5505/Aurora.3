@@ -447,10 +447,6 @@
 
 	return TRUE
 
-/mob/living/carbon/get_shock()
-	if(can_feel_pain())
-		return ..()
-
 /mob/living/carbon/proc/need_breathe()
 	return
 

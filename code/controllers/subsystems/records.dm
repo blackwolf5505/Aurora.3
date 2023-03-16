@@ -228,7 +228,7 @@
 	if(manifest.len)
 		return manifest
 	if(!SSjobs)
-		log_error("SSjobs not available, cannot build manifest")
+		error("SSjobs not available, cannot build manifest")
 		return
 	manifest = DEPARTMENTS_LIST_INIT
 	for(var/datum/record/general/t in records)

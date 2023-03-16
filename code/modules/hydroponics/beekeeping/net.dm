@@ -1,10 +1,9 @@
 /obj/item/bee_net
 	name = "bee net"
 	desc = "A net for catching rogue bees."
-	icon = 'icons/obj/beekeeping.dmi'
+	icon = 'icons/obj/apiary_bees_etc.dmi'
 	icon_state = "bee_net"
 	item_state = "bee_net"
-	contained_sprite = TRUE
 	var/caught_bees = 0
 	var/feralbees
 
@@ -34,6 +33,7 @@
 		deposit_bees(A, user)
 		return TRUE
 	..(A, user, click_parameters)
+
 
 /obj/item/bee_net/proc/capture_bees(var/mob/living/simple_animal/bee/target, var/mob/living/user)
 	if(user)

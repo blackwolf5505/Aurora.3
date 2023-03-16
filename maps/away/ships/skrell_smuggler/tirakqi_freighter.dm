@@ -51,12 +51,6 @@
     designation = "[pick("Bigger Squib", "Frightful Whaler", "Star Spanner", "Lu'Kaax", "Star Scamp", "Ocean Ink", "Yippi")]"
     ..()
 
-/obj/effect/overmap/visitable/ship/tirakqi_freighter/get_skybox_representation()
-	var/image/skybox_image = image('icons/skybox/subcapital_ships.dmi', "skrell_freighter")
-	skybox_image.pixel_x = rand(0,64)
-	skybox_image.pixel_y = rand(128,256)
-	return skybox_image
-
 /obj/effect/shuttle_landmark/tirakqi_freighter/nav1
 	name = "Ti'Rakqi Freighter - Starboard"
 	landmark_tag = "nav_tirakqi_freighter_1"
