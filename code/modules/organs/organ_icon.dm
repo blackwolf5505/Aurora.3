@@ -3,7 +3,7 @@
 
 /obj/item/organ/external/proc/compile_icon()
 	cut_overlays()
-	 // This is a kludge, only one icon has more than one generation of children though.
+	// This is a kludge, only one icon has more than one generation of children though.
 	for(var/obj/item/organ/external/organ in contents)
 		if(organ.children && organ.children.len)
 			for(var/obj/item/organ/external/child in organ.children)
@@ -17,7 +17,7 @@
 	hair_color = null
 	var/limb_exception = FALSE
 	if(robotize_type)
-		var/datum/robolimb/R = all_robolimbs[robotize_type]
+		var/datum/robolimb/R = GLOB.all_robolimbs[robotize_type]
 		if(R.paintable)
 			limb_exception = TRUE
 	if((status & ORGAN_ROBOT) && !limb_exception)
@@ -84,11 +84,12 @@
 			mob_icon.Blend(eyes_icon, ICON_OVERLAY)
 			add_overlay(eyes_icon)
 
-	if(owner.lip_style && (species && (species.appearance_flags & HAS_LIPS)))
-		var/icon/lip_icon = SSicon_cache.human_lip_cache["[owner.lip_style]"]
+	if(owner.lipstick_color && (species && (species.appearance_flags & HAS_LIPS)))
+		var/icon/lip_icon = SSicon_cache.human_lip_cache["[owner.lipstick_color]"]
 		if (!lip_icon)
-			lip_icon = new/icon('icons/mob/human_face/lips.dmi', "[owner.lip_style]")
-			SSicon_cache.human_lip_cache["[owner.lip_style]"] = lip_icon
+			lip_icon = new/icon('icons/mob/human_face/lips.dmi', "lips")
+			lip_icon.Blend(owner.lipstick_color, species.eyes_icon_blend)
+			SSicon_cache.human_lip_cache["[owner.lipstick_color]"] = lip_icon
 
 		add_overlay(lip_icon)
 		mob_icon.Blend(lip_icon, ICON_OVERLAY)
@@ -138,11 +139,15 @@
 /obj/item/organ/external/proc/get_internal_organs_overlay()
 	for(var/obj/item/organ/internal/O in internal_organs)
 		if(O.on_mob_icon)
-			var/cache_key = "[O.on_mob_icon]-[O.item_state || O.icon_state]"
+			var/internal_organ_icon = O.on_mob_icon
+			var/cache_key = "[internal_organ_icon]-[O.item_state || O.icon_state]"
+			if(owner && O.sprite_sheets && O.sprite_sheets[owner.species.get_bodytype()])
+				cache_key = "[O.sprite_sheets[owner.species.get_bodytype()]]-[O.item_state || O.icon_state]"
+				internal_organ_icon = O.sprite_sheets[owner.species.get_bodytype()]
 
 			var/icon/organ_icon = SSicon_cache.internal_organ_cache[cache_key]
 			if (!organ_icon)
-				organ_icon = new /icon(O.on_mob_icon, O.item_state || O.icon_state)
+				organ_icon = new /icon(internal_organ_icon, O.item_state || O.icon_state)
 				SSicon_cache.internal_organ_cache[cache_key] = organ_icon
 
 			add_overlay(organ_icon)
@@ -264,7 +269,10 @@
 
 	for(var/obj/item/organ/internal/O in internal_organs)
 		if(O.on_mob_icon)
-			keyparts += "[O.on_mob_icon]-[O.item_state || O.icon_state]"
+			if(owner && O.sprite_sheets && O.sprite_sheets[owner.species.get_bodytype()])
+				keyparts += "[O.sprite_sheets[owner.species.get_bodytype()]]-[O.item_state || O.icon_state]"
+			else
+				keyparts += "[O.on_mob_icon]-[O.item_state || O.icon_state]"
 
 	. = keyparts.Join("_")
 

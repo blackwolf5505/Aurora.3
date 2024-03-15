@@ -1,12 +1,18 @@
 /mob/living/silicon/robot/set_intent(var/set_intent)
 	a_intent = set_intent
 	cut_overlay(eye_overlay)
+	if(!length(module_sprites))
+		return
+	if(!length(cached_eye_overlays))
+		setup_eye_cache()
 	if(!stat)
 		eye_overlay = cached_eye_overlays[a_intent]
 		add_overlay(eye_overlay)
 
 /mob/living/silicon/robot/proc/handle_panel_overlay()
 	cut_overlay(panel_overlay)
+	if(!length(cached_panel_overlays))
+		setup_panel_cache()
 	if(opened)
 		if(wires_exposed)
 			panel_overlay = cached_panel_overlays[ROBOT_PANEL_EXPOSED]
@@ -23,7 +29,7 @@
 	setup_panel_cache()
 
 /mob/living/silicon/robot/proc/setup_eye_cache()
-	if(!module_sprites[icontype][ROBOT_EYES])
+	if(!module_sprites?[icontype]?[ROBOT_EYES])
 		return
 	var/eye_layer = src.layer
 	if(lights_on && layer == MOB_LAYER) // in case you're hiding. so eyes don't go through tables.
@@ -45,7 +51,9 @@
 	add_overlay(eye_overlay)
 
 /mob/living/silicon/robot/proc/setup_panel_cache()
-	if(!module_sprites[icontype][ROBOT_PANEL])
+	if(!length(module_sprites))
+		return
+	if(!module_sprites?[icontype]?[ROBOT_PANEL])
 		return
 	var/panelprefix = custom_sprite ? src.ckey : module_sprites[icontype][ROBOT_PANEL] // Shoutout to Geeves.
 	cached_panel_overlays = list(

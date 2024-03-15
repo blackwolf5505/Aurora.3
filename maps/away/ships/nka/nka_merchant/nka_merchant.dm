@@ -8,6 +8,8 @@
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/nka_merchant_shuttle)
 	sectors = list(SECTOR_BADLANDS, SECTOR_SRANDMARR, SECTOR_VALLEY_HALE, SECTOR_CORP_ZONE, SECTOR_TAU_CETI)
 
+	unit_test_groups = list(3)
+
 /singleton/submap_archetype/nka_merchant
 	map = "Her Majesty's Mercantile Flotilla Ship"
 	descriptor = "The Hma'trra class is a modified version of the corporate freighter sold by the SCC to the New Kingdom. It is simple model adapted to the long journey between Adhomai and Tau Ceti."
@@ -23,6 +25,13 @@
 	max_speed = 1/(2 SECONDS)
 	fore_dir = NORTH
 	vessel_size = SHIP_SIZE_SMALL
+	scanimage = "nka_freighter.png"
+	designer = "NanoTrasen, New Kingdom of Adhomai"
+	volume = "49 meters length, 28 meters beam/width, 11 meters vertical height"
+	drive = "Low-Speed Warp Acceleration FTL Drive"
+	weapons = "Not apparent, port obscured flight craft bay"
+	sizeclass = "Hma'trra Freighter"
+	shiptype = "Long-term shipping utilities"
 	initial_generic_waypoints = list(
 		"nka_merchant_ship_1",
 		"nka_merchant_ship_2",
@@ -32,6 +41,8 @@
 	initial_restricted_waypoints = list(
 		"Her Majesty's Mercantile Flotilla Shuttle" = list("nav_nka_merchant_shuttle")
 	)
+
+	invisible_until_ghostrole_spawn = TRUE
 
 /obj/effect/overmap/visitable/ship/nka_merchant/New()
 	designation = "[pick("Minharrzka's Daughter", "Her Majesty's Merchant", "Vahzirthaamro", "Azunja's Favorite", "Wealth-Beyond-Measure", "Miran'mir", "Crown Traveller", "Space Monarch")]"

@@ -2,18 +2,28 @@
 	real_name = "Test Dummy"
 	status_flags = GODMODE|CANPUSH
 
+
 /mob/living/carbon/human/dummy/mannequin
 	mob_thinks = FALSE
 
 INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 
+
 /mob/living/carbon/human/dummy/mannequin/Initialize()
 	. = ..()
-	mob_list -= src
-	living_mob_list -= src
-	dead_mob_list -= src
-	human_mob_list -= src
+	GLOB.mob_list -= src
+	GLOB.living_mob_list -= src
+	GLOB.dead_mob_list -= src
+	GLOB.human_mob_list -= src
 	delete_inventory()
+
+/mob/living/carbon/human/dummy/mannequin/Destroy()
+	SSmobs.free_mannequin(src)
+	. = ..()
+
+/mob/living/carbon/human/vatgrown/Initialize(mapload)
+	. = ..(mapload, SPECIES_HUMAN_VATGROWN)
+	mob_thinks = FALSE
 
 /mob/living/carbon/human/skrell/Initialize(mapload)
 	h_style = "Skrell Average Tentacles"
@@ -66,7 +76,7 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 /mob/living/carbon/human/type_a/cargo/Initialize(mapload)
 	. = ..()
 	// Equip mask to allow the drone to breathe
-	equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vaurca/filter(src), slot_wear_mask)
+	equip_to_slot_or_del(new /obj/item/clothing/mask/gas/vaurca/filter(src), slot_wear_mask)
 	// Set internals
 	var/obj/item/organ/internal/vaurca/preserve/P = internal_organs_by_name[BP_PHORON_RESERVE]
 	internal = P
@@ -74,11 +84,11 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 	var/list/hive = splittext(name, " ")
 	switch(hive[length(hive)])
 		if("K'lax")
-			change_skin_color(33, 63, 33)
+			change_skin_color(20, 170, 20) // Vedhra does bioresearch.
 		if("C'thur")
-			change_skin_color(10, 35, 55)
+			change_skin_color(10, 35, 55) // Vytel tolerates the SCC the most.
 		if("Zo'ra")
-			change_skin_color(111, 21, 21)
+			change_skin_color(71 ,11, 51) // Scay does bioresearch.
 
 /mob/living/carbon/human/type_b/Initialize(mapload)
 	h_style = "Classic Antennae"
@@ -204,7 +214,7 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 	var/obj/item/card/id/ID = new /obj/item/card/id(get_turf(src))
 	ID.assignment = "Overseer"
 	src.set_id_info(ID)
-	ID.access = list(access_armory)
+	ID.access = list(ACCESS_ARMORY)
 	equip_to_slot_or_del(ID, slot_wear_id)
 	equip_to_slot_or_del(new /obj/item/clothing/under/rank/warden/remote(src), slot_w_uniform)
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/jackboots(src), slot_shoes)
@@ -252,8 +262,8 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 	remote_network = REMOTE_BUNKER_ROBOT
 	SSvirtualreality.add_robot(src, remote_network)
 
-/mob/living/carbon/human/terminator/Initialize(mapload)
-	. = ..(mapload, SPECIES_IPC_TERMINATOR)
+/mob/living/carbon/human/hunter_killer/Initialize(mapload)
+	. = ..(mapload, SPECIES_IPC_PURPOSE_HK)
 	add_language(LANGUAGE_SOL_COMMON, 1)
 	add_language(LANGUAGE_ELYRAN_STANDARD, 1)
 	add_language(LANGUAGE_UNATHI, 1)
@@ -262,17 +272,13 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_GUTTER, 1)
 	add_language(LANGUAGE_EAL, 1)
-	src.equip_to_slot_or_del(new /obj/item/rig/terminator(src),slot_back)
-	src.equip_to_slot_or_del(new /obj/item/gun/projectile/automatic/terminator(src),slot_l_hand)
+	accent = ACCENT_TTS
+	src.equip_to_slot_or_del(new /obj/item/gun/energy/scythe(src),slot_l_hand)
 	src.equip_to_slot_or_del(new /obj/item/clothing/under/gearharness, slot_w_uniform)
-	src.equip_to_slot_or_del(new /obj/item/device/radio/headset/syndicate(src), slot_l_ear)
 	src.equip_to_slot_or_del(new /obj/item/grenade/frag(src), slot_l_store)
 	src.equip_to_slot_or_del(new /obj/item/melee/energy/sword(src), slot_r_store)
 
 	var/obj/item/storage/belt/security/tactical/commando_belt = new(src)
-	commando_belt.contents += new /obj/item/ammo_magazine/flechette
-	commando_belt.contents += new /obj/item/ammo_magazine/flechette/explosive
-	commando_belt.contents += new /obj/item/ammo_magazine/flechette/explosive
 	commando_belt.contents += new /obj/item/melee/baton/loaded
 	commando_belt.contents += new /obj/item/shield/energy
 	commando_belt.contents += new /obj/item/handcuffs
@@ -281,7 +287,7 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy/mannequin)
 	src.equip_to_slot_or_del(commando_belt, slot_belt)
 	src.gender = NEUTER
 
-/mob/living/carbon/human/terminator
+/mob/living/carbon/human/hunter_killer
 	mob_size = 30
 
 /mob/living/carbon/human/golem/Initialize(mapload)

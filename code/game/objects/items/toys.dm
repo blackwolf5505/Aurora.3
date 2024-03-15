@@ -62,20 +62,20 @@
 		src.update_icon()
 	return
 
-/obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/reagent_containers/glass))
-		if(O.reagents)
-			if(O.reagents.total_volume < 1)
-				to_chat(user, "The [O] is empty.")
-			else if(O.reagents.total_volume >= 1)
-				if(O.reagents.has_reagent(/singleton/reagent/acid/polyacid, 1))
+/obj/item/toy/waterballoon/attackby(obj/item/attacking_item, mob/user)
+	if(istype(attacking_item, /obj/item/reagent_containers/glass))
+		if(attacking_item.reagents)
+			if(attacking_item.reagents.total_volume < 1)
+				to_chat(user, "The [attacking_item] is empty.")
+			else if(attacking_item.reagents.total_volume >= 1)
+				if(attacking_item.reagents.has_reagent(/singleton/reagent/acid/polyacid, 1))
 					to_chat(user, "The acid chews through the balloon!")
-					O.reagents.splash(user, reagents.total_volume)
+					attacking_item.reagents.splash(user, reagents.total_volume)
 					qdel(src)
 				else
 					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					to_chat(user, "<span class='notice'>You fill the balloon with the contents of [O].</span>")
-					O.reagents.trans_to_obj(src, 10)
+					to_chat(user, "<span class='notice'>You fill the balloon with the contents of [attacking_item].</span>")
+					attacking_item.reagents.trans_to_obj(src, 10)
 		src.update_icon()
 		return TRUE
 
@@ -100,9 +100,9 @@
  * Balloons
  */
 
- #define BALLOON_NORMAL	0
- #define BALLOON_BLOW	1
- #define BALLOON_BURST	2
+#define BALLOON_NORMAL	0
+#define BALLOON_BLOW	1
+#define BALLOON_BURST	2
 
 /obj/item/toy/balloon
 	name = "balloon"
@@ -174,8 +174,8 @@
 		burst()
 	return
 
-/obj/item/toy/balloon/attackby(obj/item/W as obj, mob/user as mob)
-	if(W.can_puncture())
+/obj/item/toy/balloon/attackby(obj/item/attacking_item, mob/user)
+	if(attacking_item.can_puncture())
 		burst()
 		return TRUE
 
@@ -379,6 +379,19 @@
 	the caves. Forces of Raskara, shape-shifting creatures, dastardly traps and true evil lurking within, the Az'Marian and his sidekick will have to use their \
 	newly regained powers to their fullest."
 
+/obj/item/toy/comic/witchfinder
+	icon = 'icons/obj/library.dmi'
+	name = "Witchfinder novel"
+	desc = "A popular genre of Dominian mystery literature, glorifying the Tribunal Investigations Constabulary and the work they do in \
+	defending the souls of the people of the Empire."
+	desc_extended = "Popular throughout the empire, witchfinder novels can range from schlock aimed at younger audiences to monstrous tomes dedicated to the \
+	purportedly real-life escapades of existing witchfinders. No matter their status as educational fiction or fact, every one has two things in common: the \
+	common rituals of the Constabulary, such as exorcisms and witchfindings, and a carefully-screened dose of indoctrination into the Moroz Holy Tribunal. Popular \
+	authors of witchfinder novels, such as Novi Jadran's Andrija Jurina, even travel abroad as honored servants of His Imperial Majesty Boleslaw Keeser, both to \
+	promote Dominian arts among their foreign partners and to proselytize their state religion to eager masses."
+	icon_state = "witchfindernovel"
+	item_state = "witchfindernovel"
+
 //
 // Toy Crossbows
 //
@@ -396,15 +409,16 @@
 	attack_verb = list("attacked", "struck", "hit")
 	var/dart_count = 5
 
-/obj/item/toy/crossbow/examine(mob/user)
-	if(..(user, 2) && dart_count)
-		to_chat(user, "<span class='notice'>\The [src] is loaded with [dart_count] foam dart\s.</span>")
+/obj/item/toy/crossbow/get_examine_text(mob/user, distance, is_adjacent, infix, suffix)
+	. = ..()
+	if(distance <= 2 && dart_count)
+		. += "<span class='notice'>\The [src] is loaded with [dart_count] foam dart\s.</span>"
 
-/obj/item/toy/crossbow/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/toy/ammo/crossbow))
+/obj/item/toy/crossbow/attackby(obj/item/attacking_item, mob/user)
+	if(istype(attacking_item, /obj/item/toy/ammo/crossbow))
 		if(dart_count <= 4)
-			user.drop_from_inventory(I, src)
-			qdel(I)
+			user.drop_from_inventory(attacking_item, src)
+			qdel(attacking_item)
 			dart_count++
 			to_chat(user, "<span class='notice'>You load the foam dart into \the [src].</span>")
 		else
@@ -557,7 +571,7 @@
 	drop_sound = 'sound/items/drop/gun.ogg'
 	pickup_sound = /singleton/sound_category/sword_pickup_sound
 	equip_sound = /singleton/sound_category/sword_equip_sound
-	flags = CONDUCT
+	obj_flags = OBJ_FLAG_CONDUCTABLE
 	slot_flags = SLOT_BELT | SLOT_BACK
 	force = 5
 	throwforce = 5
@@ -588,14 +602,14 @@
 /obj/item/toy/snappop/Crossed(H as mob|obj)
 	if((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/human/M = H
-		if(M.shoes?.item_flags & LIGHTSTEP)
+		if(M.shoes?.item_flags & ITEM_FLAG_LIGHT_STEP)
 			return
 		if(M.m_intent == M_RUN)
 			to_chat(M, SPAN_WARNING("You step on the snap pop!"))
 			do_pop()
 
 /obj/item/toy/snappop/proc/do_pop()
-	spark(src, 3, alldirs)
+	spark(src, 3, GLOB.alldirs)
 	new /obj/effect/decal/cleanable/ash(get_turf(src))
 	visible_message(SPAN_WARNING("\The [src] explodes!"), SPAN_WARNING("You hear a snap!"))
 	playsound(get_turf(src), 'sound/effects/snap.ogg', 50, TRUE)
@@ -615,7 +629,7 @@
  * Water flower
  */
 
- //moved to spray.dm
+//moved to spray.dm
 
 /*
  * Bosun's whistle
@@ -808,8 +822,8 @@
 	icon_state = "geneticist"
 
 /obj/item/toy/figure/hop
-	name = "head of personel action figure"
-	desc = "A \"Space Life\" brand head of personel action figure."
+	name = "head of personnel action figure"
+	desc = "A \"Space Life\" brand head of personnel action figure."
 	icon_state = "hop"
 
 /obj/item/toy/figure/hos
@@ -942,8 +956,15 @@
 	drop_sound = 'sound/items/drop/plushie.ogg'
 	pickup_sound = 'sound/items/pickup/plushie.ogg'
 	var/phrase = "Hewwo!"
+	/// defines what sound is played when poking the plushie (using it inhand on disarm intent).
+	var/poke_sound = 'sound/items/drop/plushie.ogg'
+	///A cooldown to stop the poke sound being spammed.
+	var/poke_cooldown = 0
 
 /obj/item/toy/plushie/attack_self(mob/user as mob)
+	if(poke_cooldown > world.time)
+		return
+	poke_cooldown = world.time + 2 SECONDS
 	if(user.a_intent == I_HELP)
 		user.visible_message("<span class='notice'><b>\The [user]</b> hugs [src]!</span>","<span class='notice'>You hug [src]!</span>")
 	else if (user.a_intent == I_HURT)
@@ -952,7 +973,7 @@
 		user.visible_message("<span class='warning'><b>\The [user]</b> attempts to strangle [src]!</span>","<span class='warning'>You attempt to strangle [src]!</span>")
 	else
 		user.visible_message("<span class='notice'><b>\The [user]</b> pokes the [src].</span>","<span class='notice'>You poke the [src].</span>")
-		playsound(src, 'sound/items/drop/plushie.ogg', 25, 0)
+		playsound(src, poke_sound, 25, 0)
 		visible_message("[src] says, \"[phrase]\"")
 
 //Large plushies.
@@ -1003,7 +1024,7 @@
 
 /obj/item/toy/plushie/kitten
 	name = "kitten plush"
-	desc = "A plushie of a cute kitten! Watch as it purrs it's way right into your heart."
+	desc = "A plushie of a cute kitten! Watch as it purrs its way right into your heart."
 	icon_state = "kittenplushie"
 	slot_flags = SLOT_HEAD
 
@@ -1044,12 +1065,18 @@
 	desc = "A schlorrgo plushie, ready to roll his way into your heart!"
 	icon_state = "schlorrgoplushie"
 	phrase = "Eough!"
+	drop_sound = 'sound/effects/creatures/ough.ogg'
+	pickup_sound = 'sound/effects/creatures/ough.ogg'
+	poke_sound = 'sound/effects/creatures/ough.ogg'
 
 /obj/item/toy/plushie/coolschlorrgo
 	name = "Cool Schlorrgo plush"
 	desc = "A plushie of the popular cartoon character, Cool Schlorrgo. Hadii's grace!"
 	icon_state = "coolerschlorrgoplushie"
 	phrase = "Eough!"
+	drop_sound = 'sound/effects/creatures/ough.ogg'
+	pickup_sound = 'sound/effects/creatures/ough.ogg'
+	poke_sound = 'sound/effects/creatures/ough.ogg'
 
 /obj/item/toy/plushie/slime
 	name = "slime plush"
@@ -1187,6 +1214,66 @@
 	icon_state = "squidplushie_colour"
 	// slot_flags = SLOT_HEAD - head sprite may come someday, but not today.
 	phrase = "Blub!"
+
+// Herring Gull Plushie
+/obj/item/toy/plushie/herring_gull
+	name = "herring gull plushie"
+	desc = "A herring gull plushie. Adorable!"
+	desc_extended = "The European herring gull, also known as <i>Larus argentatus</i>, is a common seabird originating from Earth. It can be found on and around \
+	the coasts as well as cities on Earth and wherever it may have been transplanted to. Commonly seen as something that symbolizes the sea as well as freedom."
+	icon_state = "herring_gull"
+	item_state = "herring_gull"
+	phrase = "Kek kek kek!"
+	var/lying = FALSE
+
+/obj/item/toy/plushie/herring_gull/attack_self(mob/user)
+	if(user.a_intent == I_HELP)
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> pets \the [src]."),
+			SPAN_NOTICE("You pet \the [src].")
+		)
+	else if(user.a_intent == I_DISARM)
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> squeezes \the [src]."),
+			SPAN_NOTICE("You squeeze \the [src].")
+		)
+	else if(user.a_intent == I_GRAB)
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> hugs \the [src]."),
+			SPAN_NOTICE("You hug \the [src].")
+		)
+	else if(user.a_intent == I_HURT)
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> pokes \the [src]."),
+			SPAN_NOTICE("You poke \the [src].")
+		)
+		playsound(src, 'sound/items/plushies/herring_gull/alarm_call.ogg', 75, FALSE)
+		visible_message("<b>\The [src]</b> says, \"[phrase]\"")
+
+/obj/item/toy/plushie/herring_gull/AltClick(mob/user)
+	if(lying)
+		lying = !lying
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> extends \the [src]'s legs."),
+			SPAN_NOTICE("You extend \the [src]'s legs.")
+		)
+		icon_state = "herring_gull"
+		item_state = "herring_gull"
+	else
+		lying = !lying
+		user.visible_message(
+			SPAN_NOTICE("<b>\The [user]</b> tucks in \the [src]'s legs."),
+			SPAN_NOTICE("You tuck in \the [src]'s legs.")
+		)
+		icon_state = "herring_gull_lying"
+		item_state = "herring_gull_lying"
+
+//Jeweler cockatoo plushie
+/obj/item/toy/plushie/cockatoo
+	name = "jeweler cockatoo plushie"
+	desc = "A plushie of Konyang's national animal, much smaller than the real thing. This one won't get you arrested for touching it, either."
+	icon_state = "cockatoo"
+	phrase = "Chirp!"
 
 //Toy cult sword
 /obj/item/toy/cultsword

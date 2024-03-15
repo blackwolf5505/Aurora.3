@@ -8,6 +8,8 @@
 	id = "peoples_station"
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/peoples_station_fang)
 
+	unit_test_groups = list(1)
+
 /singleton/submap_archetype/peoples_station
 	map = "People's Space Station"
 	descriptor = "Built in the interwar period, the People's Space Station bears the prestige of being the first space installation designed, constructed, and manned by Tajara."
@@ -19,6 +21,13 @@
 	icon = 'icons/obj/overmap/overmap_stationary.dmi'
 	icon_state = "battlestation"
 	color = "#8C8A81"
+	static_vessel = TRUE
+	generic_object = FALSE
+	scanimage = "pss.png"
+	designer = "People's Republic of Adhomai"
+	volume = "101 meters length, 115 meters beam/width, 32 meters vertical height"
+	weapons = "Dual extruding starboard-mounted medium and small caliber ballistic armament, two port obscured flight craft bays"
+	sizeclass = "Armed military surveillance and waypoint station"
 
 	initial_generic_waypoints = list(
 		"nav_peoples_station_ship_1",

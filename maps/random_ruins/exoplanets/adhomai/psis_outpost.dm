@@ -5,6 +5,7 @@
 
 	spawn_weight = 1
 	spawn_cost = 2
+	template_flags = TEMPLATE_FLAG_NO_RUINS|TEMPLATE_FLAG_RUIN_STARTS_DISALLOWED
 	sectors = list(SECTOR_SRANDMARR)
 	suffixes = list("adhomai/psis_outpost.dmm")
 
@@ -15,7 +16,7 @@
 	dynamic_lighting = TRUE
 	no_light_control = FALSE
 	base_turf = /turf/simulated/floor/exoplanet/mineral/adhomai
-	flags = RAD_SHIELDED
+	area_flags = AREA_FLAG_RAD_SHIELDED
 	ambience = AMBIENCE_HIGHSEC
 
 //ghost roles
@@ -30,7 +31,7 @@
 	max_count = 3
 
 	extra_languages = list(LANGUAGE_SIIK_MAAS)
-	outfit = /datum/outfit/admin/psis_outpost
+	outfit = /obj/outfit/admin/psis_outpost
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI, SPECIES_TAJARA_ZHAN)
 	allow_appearance_change = APPEARANCE_PLASTICSURGERY
 
@@ -39,13 +40,13 @@
 	respawn_flag = null
 	uses_species_whitelist = FALSE
 
-/datum/outfit/admin/psis_outpost
+/obj/outfit/admin/psis_outpost
 	name = "People's Strategic Intelligence Service Agent"
 
 	uniform = /obj/item/clothing/under/tajaran/psis
 	head = /obj/item/clothing/head/tajaran/psis
 	back = /obj/item/storage/backpack/satchel
-	shoes = /obj/item/clothing/shoes/tajara/combat
+	shoes = /obj/item/clothing/shoes/combat
 	belt = /obj/item/storage/belt/military
 	accessory = /obj/item/clothing/accessory/hadii_pin
 	belt_contents = list(
@@ -62,5 +63,5 @@
 	r_pocket = /obj/item/storage/wallet/random
 	l_pocket = /obj/item/device/radio
 
-/datum/outfit/admin/psis_outpost/get_id_access()
-	return list(access_pra)
+/obj/outfit/admin/psis_outpost/get_id_access()
+	return list(ACCESS_PRA)

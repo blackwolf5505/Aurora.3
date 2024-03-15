@@ -57,7 +57,7 @@
 		A.visible_message("<span class='warning'>[A] strikes [D] with their closed fist!</span>")
 	return 1
 
-datum/martial_art/karak_virul/grab_act(var/mob/living/carbon/human/A, var/mob/living/carbon/human/D)
+/datum/martial_art/karak_virul/grab_act(var/mob/living/carbon/human/A, var/mob/living/carbon/human/D)
 	if(check_streak(A,D))
 		return 1
 	..()
@@ -91,6 +91,7 @@ datum/martial_art/karak_virul/grab_act(var/mob/living/carbon/human/A, var/mob/li
 	name = "karak virul manual"
 	desc = "A manual designated to teach the user about the skrellian martial art of Karak Virul."
 	martial_art = /datum/martial_art/karak_virul
+	species_restriction = list(SPECIES_SKRELL, SPECIES_SKRELL_AXIORI)
 
 #undef PAINFUL_PALM
 #undef SKRELL_LEG_SWEEP

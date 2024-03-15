@@ -263,9 +263,9 @@
 	else
 		icon_state = "access_button_off"
 
-/obj/machinery/access_button/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/access_button/attackby(obj/item/attacking_item, mob/user)
 	//Swiping ID on the access button
-	if (I.GetID())
+	if (attacking_item.GetID())
 		attack_hand(user)
 		return TRUE
 	return ..()
@@ -315,3 +315,5 @@
 	//if there's no power, receive the signal but just don't do anything. This allows airlocks to continue to work normally once power is restored
 	if(arePowerSystemsOn())
 		INVOKE_ASYNC(src, PROC_REF(execute_current_command))
+
+#undef AIRLOCK_CONTROL_RANGE

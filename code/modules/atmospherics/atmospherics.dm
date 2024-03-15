@@ -54,8 +54,8 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/LateInitialize()
 	atmos_init()
 
-/obj/machinery/atmospherics/attackby(atom/A, mob/user as mob)
-	if(istype(A, /obj/item/device/pipe_painter))
+/obj/machinery/atmospherics/attackby(obj/item/attacking_item, mob/user)
+	if(istype(attacking_item, /obj/item/device/pipe_painter))
 		return FALSE
 	..()
 
@@ -77,7 +77,7 @@ Pipelines + Other Objects -> Pipe network
 	else
 		return 0
 
-obj/machinery/atmospherics/proc/check_connect_types(obj/machinery/atmospherics/atmos1, obj/machinery/atmospherics/atmos2)
+/obj/machinery/atmospherics/proc/check_connect_types(obj/machinery/atmospherics/atmos1, obj/machinery/atmospherics/atmos2)
 	return (atmos1.connect_types & atmos2.connect_types)
 
 /obj/machinery/atmospherics/proc/check_connect_types_construction(obj/machinery/atmospherics/atmos1, obj/item/pipe/pipe2)
@@ -99,7 +99,7 @@ obj/machinery/atmospherics/proc/check_connect_types(obj/machinery/atmospherics/a
 
 	return node.pipe_color
 
-/obj/machinery/atmospherics/process()
+/obj/machinery/atmospherics/process(seconds_per_tick)
 	last_flow_rate = 0
 	last_power_draw = 0
 

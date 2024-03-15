@@ -4,6 +4,7 @@
 	description = "A heavily guarded Hadiist missile silo."
 	spawn_weight = 1
 	spawn_cost = 2
+	template_flags = TEMPLATE_FLAG_NO_RUINS|TEMPLATE_FLAG_RUIN_STARTS_DISALLOWED
 	sectors = list(SECTOR_SRANDMARR)
 	suffixes = list("adhomai/adhomai_silo.dmm")
 
@@ -14,7 +15,7 @@
 	dynamic_lighting = TRUE
 	no_light_control = FALSE
 	base_turf = /turf/simulated/floor/exoplanet/mineral/adhomai
-	flags = RAD_SHIELDED
+	area_flags = AREA_FLAG_RAD_SHIELDED
 	ambience = AMBIENCE_HIGHSEC
 
 //ghost roles
@@ -29,7 +30,7 @@
 	max_count = 1
 
 	extra_languages = list(LANGUAGE_SIIK_MAAS)
-	outfit = /datum/outfit/admin/silo_guard
+	outfit = /obj/outfit/admin/silo_guard
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI)
 	allow_appearance_change = APPEARANCE_PLASTICSURGERY
 
@@ -40,14 +41,14 @@
 	uses_species_whitelist = FALSE
 
 
-/datum/outfit/admin/silo_guard
+/obj/outfit/admin/silo_guard
 	name = "People's Republic of Adhomai Silo Guard"
 
 	uniform = /obj/item/clothing/under/tajaran/pra_uniform
 	head = /obj/item/clothing/head/beret/tajaran/pra
 	suit = /obj/item/clothing/suit/storage/tajaran/pra_jacket/armored
 	back = /obj/item/gun/projectile/automatic/rifle/adhomian
-	shoes = /obj/item/clothing/shoes/tajara/combat
+	shoes = /obj/item/clothing/shoes/combat
 	belt = /obj/item/storage/belt/military
 	accessory = /obj/item/clothing/accessory/badge/hadii_card
 	l_ear = null
@@ -64,5 +65,5 @@
 	r_pocket = /obj/item/storage/wallet/random
 	l_pocket = /obj/item/device/radio
 
-/datum/outfit/admin/silo_guard/get_id_access()
-	return list(access_pra)
+/obj/outfit/admin/silo_guard/get_id_access()
+	return list(ACCESS_PRA)

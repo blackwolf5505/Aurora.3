@@ -26,6 +26,8 @@
 /obj/item/watertank/verb/toggle_mister()
 	set name = "Toggle Mister"
 	set category = "Object"
+	set src in usr
+
 	var/mob/living/carbon/human/user
 	if(istype(usr,/mob/living/carbon/human))
 		user = usr
@@ -81,8 +83,8 @@
 	noz = null
 	return ..()
 
-/obj/item/watertank/attackby(obj/item/W, mob/user, params)
-	if(W == noz)
+/obj/item/watertank/attackby(obj/item/attacking_item, mob/user, params)
+	if(attacking_item == noz)
 		remove_noz()
 		return TRUE
 	else

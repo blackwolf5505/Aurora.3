@@ -9,6 +9,8 @@
 	id = "ssmd_corvette"
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/ssmd_shuttle)
 
+	unit_test_groups = list(3)
+
 /singleton/submap_archetype/ssmd_corvette
 	map = "SSMD Corvette"
 	descriptor = "A long-range reconnaissance corvette design in use by the Solarian Navy, the Uhlan-class is a relatively costly and somewhat uncommon ship to be seen in the Alliance's fleets, and is typically reserved for more elite (or at least better equipped and trained) units. Designed to operate alone or as part of a small task force with minimal support in unfriendly space, it is most commonly seen assigned to probing, surveillance, harassment, and strike operations. \
@@ -93,6 +95,13 @@
 	icon_state = "corvette"
 	moving_state = "corvette_moving"
 	colors = list("#9dc04c", "#52c24c")
+	scanimage = "corvette.png"
+	designer = "Solarian Navy"
+	volume = "41 meters length, 43 meters beam/width, 19 meters vertical height"
+	drive = "Low-Speed Warp Acceleration FTL Drive"
+	weapons = "Dual extruding fore caliber ballistic armament, fore obscured flight craft bay"
+	sizeclass = "Uhlan-class Corvette"
+	shiptype = "Military reconnaissance and extended-duration combat utility"
 	max_speed = 1/(2 SECONDS)
 	burn_delay = 1 SECONDS
 	vessel_mass = 5000
@@ -149,7 +158,7 @@
 /obj/machinery/computer/shuttle_control/explore/ssmd_shuttle
 	name = "shuttle control console"
 	shuttle_tag = "SSMD Shuttle"
-	req_access = list(access_sol_ships)
+	req_access = list(ACCESS_SOL_SHIPS)
 
 /datum/shuttle/autodock/overmap/ssmd_shuttle
 	name = "SSMD Shuttle"

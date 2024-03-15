@@ -9,7 +9,7 @@
 	spawnpoints = list("tajaran_smuggler")
 	max_count = 2
 
-	outfit = /datum/outfit/admin/tajaran_smuggler
+	outfit = /obj/outfit/admin/tajaran_smuggler
 
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI,SPECIES_TAJARA_ZHAN)
 	allow_appearance_change = APPEARANCE_PLASTICSURGERY
@@ -20,7 +20,7 @@
 	special_role = "Tajaran Smuggler"
 	respawn_flag = null
 
-/datum/outfit/admin/tajaran_smuggler
+/obj/outfit/admin/tajaran_smuggler
 	name = "Tajaran Smuggler"
 
 	uniform = list(
@@ -33,7 +33,7 @@
 	)
 
 	head = list(/obj/item/clothing/head/fedora/grey,
-				/obj/item/clothing/head/buckethat,
+				/obj/item/clothing/head/bucket,
 				/obj/item/clothing/head/that,
 				/obj/item/clothing/head/tajaran/fur,
 				/obj/item/clothing/head/bandana/red,
@@ -42,9 +42,9 @@
 
 	shoes = list(
 				/obj/item/clothing/shoes/tajara/footwraps,
-				/obj/item/clothing/shoes/tajara/jackboots,
-				/obj/item/clothing/shoes/tajara/workboots,
-				/obj/item/clothing/shoes/tajara/workboots/adhomian_boots
+				/obj/item/clothing/shoes/jackboots/tajara,
+				/obj/item/clothing/shoes/workboots/tajara,
+				/obj/item/clothing/shoes/workboots/tajara/adhomian_boots
 	)
 
 	back = list(
@@ -75,7 +75,7 @@
 	spawnpoints = list("tajaran_smuggler_captain")
 	max_count = 1
 
-	outfit = /datum/outfit/admin/freighter_crew/captain
+	outfit = /obj/outfit/admin/freighter_crew/captain
 
 	uses_species_whitelist = TRUE
 
@@ -83,7 +83,7 @@
 	special_role = "Tajaran Smuggler Captain"
 
 
-/datum/outfit/admin/tajaran_smuggler/captain
+/obj/outfit/admin/tajaran_smuggler/captain
 	name = "Tajaran Smuggler Captain"
 
 	uniform = /obj/item/clothing/under/syndicate

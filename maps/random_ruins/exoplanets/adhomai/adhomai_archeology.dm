@@ -5,6 +5,7 @@
 
 	spawn_weight = 1
 	spawn_cost = 2
+	template_flags = TEMPLATE_FLAG_NO_RUINS|TEMPLATE_FLAG_RUIN_STARTS_DISALLOWED
 	sectors = list(SECTOR_SRANDMARR)
 	suffixes = list( "adhomai/adhomai_archeology.dmm")
 
@@ -15,7 +16,7 @@
 	dynamic_lighting = TRUE
 	no_light_control = FALSE
 	base_turf = /turf/simulated/floor/exoplanet/mineral/adhomai
-	flags = RAD_SHIELDED
+	area_flags = AREA_FLAG_RAD_SHIELDED
 
 //ghost roles
 
@@ -29,7 +30,7 @@
 	spawnpoints = list("adhomai_archeology")
 	max_count = 4
 
-	outfit = /datum/outfit/admin/adhomai_archeology
+	outfit = /obj/outfit/admin/adhomai_archeology
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI,SPECIES_TAJARA_ZHAN)
 	allow_appearance_change = APPEARANCE_PLASTICSURGERY
 
@@ -39,13 +40,13 @@
 
 	uses_species_whitelist = FALSE
 
-/datum/outfit/admin/adhomai_archeology
+/obj/outfit/admin/adhomai_archeology
 	name = "Adhomian Archeologist"
 
 	uniform = /obj/item/clothing/under/tajaran/archeologist
 	suit = /obj/item/clothing/suit/storage/tajaran/archeologist
 	head = /obj/item/clothing/head/tajaran/archeologist
-	shoes = /obj/item/clothing/shoes/tajara/workboots/adhomian_boots
+	shoes = /obj/item/clothing/shoes/workboots/tajara/adhomian_boots
 	back = /obj/item/storage/backpack/satchel/leather
 	belt = /obj/item/melee/whip
 	accessory = /obj/item/clothing/accessory/holster/waist/brown

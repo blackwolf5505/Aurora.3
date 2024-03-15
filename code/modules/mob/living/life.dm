@@ -1,6 +1,4 @@
 /mob/living/Life()
-	set background = BACKGROUND_ENABLED
-
 	if (QDELETED(src))	// If they're being deleted, why bother?
 		return
 
@@ -107,8 +105,8 @@
 	//Ears
 	handle_hearing()
 
-	if((is_pacified()) && a_intent == I_HURT)
-		to_chat(src, "<span class='notice'>You don't feel like harming anybody.</span>")
+	if((is_pacified()) && a_intent == I_HURT && !is_berserk())
+		to_chat(src, SPAN_NOTICE("You don't feel like harming anybody."))
 		a_intent_change(I_HELP)
 
 //this handles hud updates. Calls update_vision() and handle_hud_icons()
@@ -162,7 +160,6 @@
 
 /mob/living/proc/update_sight()
 	set_sight(0)
-	set_see_in_dark(0)
 	if(stat == DEAD || eyeobj)
 		update_dead_sight()
 	else
@@ -180,12 +177,10 @@
 		set_sight_flags &= ~BLIND
 
 	set_sight(set_sight_flags)
-	set_see_in_dark(initial(see_in_dark))
 	set_see_invisible(initial(see_invisible))
 
 /mob/living/proc/update_dead_sight()
 	set_sight(sight|SEE_TURFS|SEE_MOBS|SEE_OBJS)
-	set_see_in_dark(8)
 	set_see_invisible(SEE_INVISIBLE_LEVEL_TWO)
 
 /mob/living/proc/handle_hud_icons()

@@ -5,6 +5,7 @@
 
 	spawn_weight = 1
 	spawn_cost = 2
+	template_flags = TEMPLATE_FLAG_NO_RUINS|TEMPLATE_FLAG_RUIN_STARTS_DISALLOWED
 	sectors = list(SECTOR_SRANDMARR)
 	suffixes = list("adhomai/ala_base.dmm")
 
@@ -15,7 +16,7 @@
 	dynamic_lighting = TRUE
 	no_light_control = FALSE
 	base_turf = /turf/simulated/floor/exoplanet/mineral/adhomai
-	flags = RAD_SHIELDED
+	area_flags = AREA_FLAG_RAD_SHIELDED
 
 //ghost roles
 
@@ -29,7 +30,7 @@
 	max_count = 3
 
 	extra_languages = list(LANGUAGE_SIIK_MAAS)
-	outfit = /datum/outfit/admin/ala_base
+	outfit = /obj/outfit/admin/ala_base
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI, SPECIES_TAJARA_ZHAN)
 	allow_appearance_change = APPEARANCE_PLASTICSURGERY
 
@@ -38,13 +39,13 @@
 	respawn_flag = null
 	uses_species_whitelist = FALSE
 
-/datum/outfit/admin/ala_base
+/obj/outfit/admin/ala_base
 	name = "Adhomai Liberation Army Soldier"
 
 	uniform = /obj/item/clothing/under/tajaran/ala
 	head = /obj/item/clothing/head/beret/tajaran/dpra/alt
 	back = /obj/item/storage/backpack/rucksack
-	shoes = /obj/item/clothing/shoes/tajara/combat
+	shoes = /obj/item/clothing/shoes/combat
 	belt = /obj/item/storage/belt/military
 	l_ear = null
 
@@ -52,8 +53,8 @@
 	r_pocket = /obj/item/storage/wallet/random
 	l_pocket = /obj/item/device/radio
 
-/datum/outfit/admin/ala_base/get_id_access()
-	return list(access_dpra)
+/obj/outfit/admin/ala_base/get_id_access()
+	return list(ACCESS_DPRA)
 
 
 /datum/ghostspawner/human/ala_base/officer
@@ -64,14 +65,14 @@
 	spawnpoints = list("ala_base_officer")
 	max_count = 1
 
-	outfit = /datum/outfit/admin/ala_base/officer
+	outfit = /obj/outfit/admin/ala_base/officer
 	possible_species = list(SPECIES_TAJARA,SPECIES_TAJARA_MSAI)
 	uses_species_whitelist = TRUE
 
 	assigned_role = "Adhomai Liberation Army Officer"
 	special_role = "Adhomai Liberation Army Officer"
 
-/datum/outfit/admin/ala_base/officer
+/obj/outfit/admin/ala_base/officer
 	name = "Adhomai Liberation Army Officer"
 
 	uniform = /obj/item/clothing/under/tajaran/ala/black/officer

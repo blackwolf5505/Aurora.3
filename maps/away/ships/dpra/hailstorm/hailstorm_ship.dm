@@ -8,6 +8,8 @@
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/hailstorm_shuttle)
 	sectors = list(SECTOR_BADLANDS, SECTOR_SRANDMARR, SECTOR_GAKAL)
 
+	unit_test_groups = list(1)
+
 /singleton/submap_archetype/hailstorm_ship
 	map = "Hailstorm Ship"
 	descriptor = "A skipjack armed with multiple mass-driver weapons designed for patrolling and brief engagements. When used for patrols, the Hailstorm is loaded with supplies to last weeks on its own; its crew is specifically trained to be as frugal as possible while aboard."
@@ -19,6 +21,13 @@
 	icon_state = "hailstorm"
 	moving_state = "hailstorm_moving"
 	colors = list("#B9BDC4")
+	scanimage = "hailstorm.png"
+	designer = "Obfuscated, hull origin uncertain"
+	volume = "37 meters length, 24 meters beam/width, 11 meters vertical height"
+	drive = "Low-Speed Warp Acceleration FTL Drive"
+	weapons = "Dual bow-mounted extruding low-caliber rotary ballistic armament, port obscured flight craft bay"
+	sizeclass = "Hailstorm-type Retrofitted Skipjack"
+	shiptype = "Short-distance military tasking, low-level naval interdiction"
 	vessel_mass = 10000
 	max_speed = 1/(2 SECONDS)
 	fore_dir = NORTH
@@ -32,6 +41,7 @@
 	initial_restricted_waypoints = list(
 		"Spacer Militia Shuttle" = list("nav_hailstorm_shuttle")
 	)
+	invisible_until_ghostrole_spawn = TRUE
 
 /obj/effect/overmap/visitable/ship/hailstorm_ship/New()
 	designation = "[pick("Al'mari", "Champion of the Tajara", "Nated's Revenge", "Mata'ke's Blade", "Star Guerilla", "Dreams of Freedom", "Al'mariist Comet", "Adhomai's Liberator")]"

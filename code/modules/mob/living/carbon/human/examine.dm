@@ -1,10 +1,7 @@
-#define SEC_HUDTYPE "security"
-#define MED_HUDTYPE "medical"
-
 /mob/living/carbon/human/proc/get_covered_body_parts(var/thick)
 	var/skipbody = 0
 	for(var/obj/item/clothing/C in list(wear_suit, head, wear_mask, w_uniform, gloves, shoes))
-		if(!thick || (C.item_flags & THICKMATERIAL))
+		if(!thick || (C.item_flags & ITEM_FLAG_THICK_MATERIAL))
 			skipbody |= C.body_parts_covered
 	return skipbody
 
@@ -35,7 +32,8 @@
 			else
 				to_chat(user, "<span class='deadsay'>[get_pronoun("He")] [get_pronoun("has")] a pulse!</span>")
 
-/mob/living/carbon/human/examine(mob/user)
+/mob/living/carbon/human/get_examine_text(mob/user, distance, is_adjacent, infix, suffix)
+	. = list()
 	var/skipbody = get_covered_body_parts()
 	var/skipbody_thick = get_covered_body_parts(TRUE)
 	var/skipitems = get_covered_clothes()
@@ -50,7 +48,7 @@
 	var/skipears = skipitems & HIDEEARS
 	var/skipwrists = skipitems & HIDEWRISTS
 
-	var/list/msg = list("<span class='info'>*---------*\nThis is ")
+	var/list/msg = list("<span class='info'>This is ")
 
 	if(icon)
 		msg += icon2html(icon, user)
@@ -222,8 +220,11 @@
 			if(o.applied_pressure == src)
 				msg += "<span class='warning'>[get_pronoun("He")] [get_pronoun("is")] applying pressure to [get_pronoun("his")] [o.name]!</span>\n"
 
-	if(HAS_FLAG(mutations, mSmallsize))
+	if((mutations & mSmallsize))
 		msg += "[get_pronoun("He")] [get_pronoun("is")] small halfling!\n"
+	//height
+	if(height)
+		msg += "[SPAN_NOTICE("[assemble_height_string(user)]")]\n"
 
 	//buckled_to
 	if(buckled_to)
@@ -241,13 +242,9 @@
 	if(is_berserk())
 		msg += "<span class='warning'><B>[get_pronoun("He")] [get_pronoun("has")] engorged veins, which appear a vibrant red!</B></span>\n"
 
-	var/distance = get_dist(user,src)
-	if(istype(user, /mob/abstract/observer) || user.stat == 2) // ghosts can see anything
-		distance = 1
-
-	if(src.stat && !(src.species.flags & NO_BLOOD))	// No point checking pulse of a species that doesn't have one.
+	if((src.stat || (status_flags & FAKEDEATH)) && !(src.species.flags & NO_BLOOD))	// No point checking pulse of a species that doesn't have one.
 		msg += "<span class='warning'>[get_pronoun("He")] [get_pronoun("is")]n't responding to anything around [get_pronoun("him")] and seems to be unconscious.</span>\n"
-		if((stat == DEAD || is_asystole() || src.losebreath) && distance <= 3 || (status_flags & FAKEDEATH))
+		if(distance <= 3 && ((stat == DEAD || is_asystole() || src.losebreath) || (status_flags & FAKEDEATH)))
 			msg += "<span class='warning'>[get_pronoun("He")] [get_pronoun("does")] not appear to be breathing.</span>\n"
 
 	else if (src.stat)
@@ -393,9 +390,9 @@
 
 	if(print_flavor_text()) msg += "[print_flavor_text()]\n"
 
-	msg += "*---------*</span>"
+	msg += "</span>"
 
-	if(src in intent_listener)
+	if(src in GLOB.intent_listener)
 		msg += SPAN_NOTICE("\n[get_pronoun("He")] looks like [get_pronoun("he")] [get_pronoun("is")] listening intently to [get_pronoun("his")] surroundings.")
 
 	var/datum/vampire/V = get_antag_datum(MODE_VAMPIRE)
@@ -403,12 +400,13 @@
 		var/obj/item/grab/G = get_active_hand()
 		msg += SPAN_ALERT(FONT_LARGE("\n[get_pronoun("He")] is biting [G.affecting]'[G.affecting.get_pronoun("end")] neck!"))
 
-	if (pose)
-		if( findtext(pose,".",length(pose)) == 0 && findtext(pose,"!",length(pose)) == 0 && findtext(pose,"?",length(pose)) == 0 )
-			pose = addtext(pose,".") //Makes sure all emotes end with a period.
+	if(pose)
+		if(findtext(pose, ".", length(pose)) == 0 && findtext(pose, "!", length(pose)) == 0 && findtext(pose, "?", length(pose)) == 0)
+			pose = addtext(pose, ".") // Makes sure all emotes end with punctuation.
 		msg += "\n[get_pronoun("He")] [pose]"
 
-	to_chat(user, msg.Join())
+	. += msg.Join()
+
 	if(Adjacent(user))
 		INVOKE_ASYNC(src, PROC_REF(examine_pulse), user)
 
@@ -456,3 +454,61 @@
 
 	var/output_text = color_map[supplied_color] || "fluid"
 	return output_text
+
+/mob/living/carbon/human/proc/assemble_height_string(mob/examiner)
+	var/height_string = ""
+	var/height_descriptor
+	if(height == HEIGHT_NOT_USED)
+		return height_string
+
+	// Compare to Species Average
+	if(species.species_height != HEIGHT_NOT_USED)
+		switch(height - species.species_height)
+			if(-999 to -100)
+				height_descriptor = "miniscule"
+			if(-99 to -50)
+				height_descriptor = "tiny"
+			if(-49 to -11)
+				height_descriptor = "small"
+			if(-10 to 10)
+				height_descriptor = "about average height"
+			if(11 to 50)
+				height_descriptor = "tall"
+			if(51 to 100)
+				height_descriptor = "huge"
+			else
+				height_descriptor = "gargantuan"
+		height_string += "[get_pronoun("He")] look[get_pronoun("end")] [height_descriptor]"
+		if(!species.hide_name)
+			height_string += " for a [species.name]"
+		height_string += "." // Punctuation.
+
+	if(examiner.height == HEIGHT_NOT_USED)
+		return height_string
+
+	switch(height - examiner.height)
+		if(-999 to -100)
+			height_descriptor = "absolutely tiny compared to"
+		if(-99 to -51)
+			height_descriptor = "much smaller than"
+		if(-50 to -21)
+			height_descriptor = "significantly shorter than"
+		if(-20 to -11)
+			height_descriptor = "shorter than"
+		if(-10 to -6)
+			height_descriptor = "slightly shorter than"
+		if(-5 to 5)
+			height_descriptor = "around the same height as"
+		if(6 to 10)
+			height_descriptor = "slightly taller than"
+		if(11 to 20)
+			height_descriptor = "taller than"
+		if(21 to 50)
+			height_descriptor = "significantly taller than"
+		if(51 to 100)
+			height_descriptor = "much larger than"
+		else
+			height_descriptor = "to tower over"
+	if(height_string)
+		return height_string += " [get_pronoun("He")] seem[get_pronoun("end")] [height_descriptor] you."
+	return "[get_pronoun("He")] seem[get_pronoun("end")] [height_descriptor] you."

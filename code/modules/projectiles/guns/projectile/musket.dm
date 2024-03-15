@@ -21,7 +21,7 @@
 
 	origin_tech = list(TECH_COMBAT = 3, TECH_MATERIAL = 2)
 
-	fire_delay = 35
+	fire_delay = ROF_SPECIAL
 	fire_sound = 'sound/weapons/gunshot/musket.ogg'
 	recoil = 4
 
@@ -44,13 +44,13 @@
 	has_powder = FALSE
 	return ..()
 
-/obj/item/gun/projectile/musket/attackby(obj/item/W, mob/user)
+/obj/item/gun/projectile/musket/attackby(obj/item/attacking_item, mob/user)
 	..()
-	if (istype(W, /obj/item/reagent_containers))
+	if (istype(attacking_item, /obj/item/reagent_containers))
 		if(has_powder)
 			to_chat(user, SPAN_WARNING("\The [src] is already full of gunpowder."))
 			return
-		var/obj/item/reagent_containers/C = W
+		var/obj/item/reagent_containers/C = attacking_item
 		if(C.reagents.has_reagent(/singleton/reagent/gunpowder, 5))
 			if(do_after(user, 15))
 				if(has_powder)

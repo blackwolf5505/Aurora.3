@@ -17,7 +17,7 @@
 	load_offset_x = 0
 	mob_offset_y = 10
 
-	var/vueui_template = "trainengine"
+	var/tgui_template = "TrainEngine"
 
 	var/car_limit = 3		//how many cars an engine can pull before performance degrades
 	active_engines = 1
@@ -68,48 +68,47 @@
 		return
 	..()
 
-/obj/vehicle/train/cargo/engine/ui_interact(mob/user)
-	var/datum/vueui/ui = SSvueui.get_open_ui(user, src)
-
+/obj/vehicle/train/cargo/engine/ui_interact(mob/user, var/datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "vehicles-[vueui_template]", 600, 400, capitalize_first_letters(initial(name)))
-		ui.auto_update_content = TRUE
+		ui = new(user, src, tgui_template, capitalize_first_letters(initial(name)), 600, 400)
+		ui.open()
 
-	ui.open()
-
-/obj/vehicle/train/cargo/engine/vueui_data_change(list/data, mob/user, datum/vueui/ui)
-	if(!length(data))
-		data = list()
-
+/obj/vehicle/train/cargo/engine/ui_data(mob/user)
+	var/list/data = list()
 	data["is_on"] = on
 	data["has_key"] = !!key
 	data["has_cell"] = !!cell
 	if(cell)
-		data["cell_charge"] = cell.charge
-		data["cell_max_charge"] = cell.maxcharge
+		data["cell_charge"] = cell.percent()
 	data["is_towing"] = !!tow
 	if(tow)
 		data["tow"] = tow.name
 
 	return data
 
-/obj/vehicle/train/cargo/engine/Topic(href, href_list, state)
+/obj/vehicle/train/cargo/engine/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()
 	if(.)
-		return TRUE
+		return
 
 	if(load && load != usr)
 		to_chat(usr, SPAN_WARNING("You can't interact with \the [src] while its in use."))
-		return TRUE
+		return
 
-	if(href_list["toggle_engine"])
-		turn_on(usr)
-	if(href_list["key"])
-		remove_key(usr)
-	if(href_list["unlatch"])
-		if(tow)
-			tow.unattach(usr)
-	SSvueui.check_uis_for_change(src)
+	switch(action)
+		if("toggle_engine")
+			turn_on(usr)
+			. = TRUE
+
+		if("key")
+			remove_key(usr)
+			. = TRUE
+
+		if("unlatch")
+			if(tow)
+				tow.unattach(usr)
+				. = TRUE
 
 /obj/vehicle/train/cargo/engine/Move(var/turf/destination)
 	if(on && cell.charge < charge_use)
@@ -127,19 +126,20 @@
 
 	return ..()
 
-/obj/vehicle/train/cargo/trolley/attackby(obj/item/W as obj, mob/user as mob)
-	if(open && W.iswirecutter())
+/obj/vehicle/train/cargo/trolley/attackby(obj/item/attacking_item, mob/user)
+	if(open && attacking_item.iswirecutter())
 		passenger_allowed = !passenger_allowed
-		user.visible_message(SPAN_NOTICE("[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src]."),SPAN_NOTICE("You [passenger_allowed ? "cut" : "mend"] the load limiter cable."))
+		user.visible_message(SPAN_NOTICE("[user] [passenger_allowed ? "cuts" : "mends"] a cable in [src]."),
+								SPAN_NOTICE("You [passenger_allowed ? "cut" : "mend"] the load limiter cable."))
 	else
 		..()
 
-/obj/vehicle/train/cargo/engine/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, key_type))
+/obj/vehicle/train/cargo/engine/attackby(obj/item/attacking_item, mob/user)
+	if(istype(attacking_item, key_type))
 		if(!key)
-			user.drop_from_inventory(W, src)
-			key = W // put the key in the ignition
-			to_chat(user, SPAN_NOTICE("You slide \the [W] into \the [src]\s ignition."))
+			user.drop_from_inventory(attacking_item, src)
+			key = attacking_item // put the key in the ignition
+			to_chat(user, SPAN_NOTICE("You slide \the [attacking_item] into \the [src]\s ignition."))
 			playsound(src, 'sound/machines/vehicles/key_in.ogg', 50, FALSE)
 		else
 			to_chat(user, SPAN_NOTICE("There is already a key in \the [src]\s ignition."))
@@ -249,15 +249,16 @@
 	else
 		return ..()
 
-/obj/vehicle/train/cargo/engine/examine(mob/user)
-	if(!..(user, 1))
+/obj/vehicle/train/cargo/engine/get_examine_text(mob/user, distance, is_adjacent, infix, suffix)
+	. = ..()
+	if(distance > 1)
 		return
 
-	if(!istype(usr, /mob/living/carbon/human))
+	if(!ishuman(user))
 		return
 
-	to_chat(user, "The power light is [on ? "on" : "off"].\nThere are[key ? "" : " no"] keys in the ignition.")
-	to_chat(user, "The charge meter reads [cell? round(cell.percent(), 0.01) : 0]%")
+	. += "The power light is [on ? "on" : "off"].\nThere are[key ? "" : " no"] keys in the ignition."
+	. += "The charge meter reads [cell? round(cell.percent(), 0.01) : 0]%."
 
 /obj/vehicle/train/cargo/engine/CtrlClick(mob/user)
 	if(load && load != user)
@@ -385,8 +386,8 @@
 	else
 		move_delay = max(0, (-car_limit * active_engines) + train_length - active_engines)	//limits base overweight so you cant overspeed trains
 		move_delay *= (1 / max(1, active_engines)) * 2 										//overweight penalty (scaled by the number of engines)
-		move_delay += config.walk_speed 													//base reference speed
-		move_delay *= config.vehicle_delay_multiplier												//makes cargo trains 10% slower than running when not overweight
+		move_delay += GLOB.config.walk_speed 													//base reference speed
+		move_delay *= GLOB.config.vehicle_delay_multiplier												//makes cargo trains 10% slower than running when not overweight
 		if(emagged)
 			move_delay -= 2
 

@@ -8,6 +8,8 @@
 	id = "tajara_scrapper"
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/tajara_scrapper)
 
+	unit_test_groups = list(2)
+
 /singleton/submap_archetype/tajara_scrapper
 	map = "adhomian scrapper outpost"
 	descriptor = "An outpost used by Tajaran scrapper. It offers repair and scrapping services."
@@ -25,6 +27,9 @@
 	)
 	comms_support = TRUE
 	comms_name = "adhomian scrapper"
+
+	icon = 'icons/obj/overmap/overmap_stationary.dmi'
+	icon_state = "outpost"
 	color = "#DAA06D"
 
 /obj/effect/shuttle_landmark/tajara_scrapper

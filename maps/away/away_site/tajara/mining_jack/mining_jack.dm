@@ -8,6 +8,8 @@
 	id = "tajara_mining_jack"
 	shuttles_to_initialise = list(/datum/shuttle/autodock/overmap/tajara_mining_jack)
 
+	unit_test_groups = list(2)
+
 /singleton/submap_archetype/tajara_mining_jack
 	map = "adhomian mining outpost"
 	descriptor = "An outpost used by the crew of mining jacks."
@@ -57,6 +59,10 @@
 	icon_state = "shuttle"
 	moving_state = "shuttle_moving"
 	colors = list("#DAA06D")
+	designer = "Independent/no designation"
+	volume = "18 meters length, 15 meters beam/width, 7 meters vertical height"
+	sizeclass = "Multi-purpose Civilian Skipjack"
+	shiptype = "Short-term industrial prospecting, raw goods transport"
 	max_speed = 1/(3 SECONDS)
 	burn_delay = 2 SECONDS
 	vessel_mass = 3000 //very inefficient pod
