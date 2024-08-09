@@ -151,7 +151,7 @@
 
 		wrenched = !wrenched
 		anchored = wrenched
-		playsound(loc, attacking_item.usesound, 75, TRUE)
+		attacking_item.play_tool_sound(get_turf(src), 75)
 		add_fingerprint(user)
 		var/others_msg = wrenched ? "<b>[user]</b> secures the external reinforcing bolts to the floor." : "<b>[user]</b> unsecures the external reinforcing bolts."
 		var/self_msg = wrenched ? "You secure the external reinforcing bolts to the floor." : "You unsecure the external reinforcing bolts."
@@ -195,7 +195,7 @@
 	alldir_cleanup()
 	return ..()
 
-/obj/machinery/shieldwallgen/bullet_act(var/obj/item/projectile/Proj)
+/obj/machinery/shieldwallgen/bullet_act(var/obj/projectile/Proj)
 	storedpower -= 400 * Proj.get_structure_damage()
 	if(power_state >= POWER_STARTING)
 		visible_message(SPAN_WARNING("\The [src]'s shielding sparks as \the [Proj] hits it!"))
@@ -255,7 +255,7 @@
 		gen_primary.storedpower -= power_usage / 2
 		gen_secondary.storedpower -= power_usage / 2
 
-/obj/shieldwall/bullet_act(var/obj/item/projectile/Proj)
+/obj/shieldwall/bullet_act(var/obj/projectile/Proj)
 	if(needs_power)
 		var/obj/machinery/shieldwallgen/G
 		if(prob(50))
@@ -294,10 +294,10 @@
 /obj/shieldwall/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(air_group || (height==0))
 		return TRUE
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && mover.pass_flags & PASSGLASS)
 		return prob(20)
 	else
-		if(istype(mover, /obj/item/projectile))
+		if(istype(mover, /obj/projectile))
 			return prob(10)
 		else
 			return !density

@@ -190,7 +190,7 @@
 		attack_living(victim)
 		attack_time = world.time
 
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
+/obj/effect/blob/bullet_act(var/obj/projectile/Proj)
 	if(!Proj)
 		return
 
@@ -227,7 +227,9 @@
 
 	take_damage(damage)
 
-/obj/effect/blob/fire_act()
+/obj/effect/blob/fire_act(exposed_temperature, exposed_volume)
+	. = ..()
+
 	take_damage(rand(5, 20) / fire_resist)
 
 #define CORE_SHIELD_HIGH "high"
@@ -375,7 +377,7 @@
 	icon = 'icons/mob/npc/blob.dmi'
 	icon_state = "tendril"
 	item_state = "blob_tendril"
-	w_class = ITEMSIZE_LARGE
+	w_class = WEIGHT_CLASS_BULKY
 	reach = 2 // long range tentacle whips - geeves
 	attack_verb = list("smacked", "smashed", "whipped")
 	var/types_of_tendril = list(TENDRIL_SOLID, TENDRIL_FIRE)
@@ -386,13 +388,13 @@
 	switch(tendril_type)
 		if(TENDRIL_SOLID)
 			desc = "An incredibly dense, yet flexible, tendril, removed from an asteroclast."
-			force = 10
+			force = 15
 			color = COLOR_BRONZE
 			origin_tech = list(TECH_MATERIAL = 2, TECH_BIO = 2)
 		if(TENDRIL_FIRE)
 			desc = "A tendril removed from an asteroclast. It's hot to the touch."
 			damtype = DAMAGE_BURN
-			force = 15
+			force = 22
 			color = COLOR_AMBER
 			origin_tech = list(TECH_POWER = 2, TECH_BIO = 2)
 
@@ -410,7 +412,7 @@
 	desc = "A sample taken from an asteroclast's nucleus. It pulses with energy."
 	icon_state = "core_sample"
 	item_state = "blob_core"
-	w_class = ITEMSIZE_NORMAL
+	w_class = WEIGHT_CLASS_NORMAL
 	origin_tech = list(TECH_MATERIAL = 4, TECH_BLUESPACE = 5, TECH_BIO = 7)
 
 /obj/item/blob_core/aux

@@ -32,7 +32,9 @@
 		ORE_GOLD = /obj/item/ore/gold,
 		ORE_DIAMOND = /obj/item/ore/diamond,
 		ORE_PLATINUM = /obj/item/ore/osmium,
-		ORE_HYDROGEN = /obj/item/ore/hydrogen
+		ORE_HYDROGEN = /obj/item/ore/hydrogen,
+		ORE_BAUXITE = /obj/item/ore/aluminium,
+		ORE_GALENA = /obj/item/ore/lead
 	)
 
 	//Upgrades
@@ -107,7 +109,7 @@
 					attached_satchel.insert_into_storage(ore)
 	else if(istype(get_turf(src), /turf/simulated/floor))
 		var/turf/simulated/floor/T = get_turf(src)
-		var/turf/below_turf = GetBelow(T)
+		var/turf/below_turf = GET_TURF_BELOW(T)
 		if(below_turf && !istype(below_turf.loc, /area/mine) && !istype(below_turf.loc, /area/exoplanet) && !istype(below_turf.loc, /area/template_noop))
 			system_error("Potential station breach below.")
 			return
@@ -120,7 +122,7 @@
 		while(length(resource_field) && !harvesting.resources)
 			harvesting.has_resources = FALSE
 			harvesting.resources = null
-			harvesting.cut_overlay(harvesting.resource_indicator)
+			harvesting.CutOverlays(harvesting.resource_indicator)
 			QDEL_NULL(harvesting.resource_indicator)
 			resource_field -= harvesting
 			if(length(resource_field))
@@ -167,7 +169,7 @@
 		if(!found_resource)
 			harvesting.has_resources = FALSE
 			harvesting.resources = null
-			harvesting.cut_overlay(harvesting.resource_indicator)
+			harvesting.CutOverlays(harvesting.resource_indicator)
 			QDEL_NULL(harvesting.resource_indicator)
 			resource_field -= harvesting
 	else
@@ -540,7 +542,7 @@
 				connected.system_error("Unexpected user interface error.")
 				return
 
-		playsound(get_turf(src), attacking_item.usesound, 100, 1)
+		attacking_item.play_tool_sound(get_turf(src), 100)
 		to_chat(user, SPAN_NOTICE("You [anchored ? "un" : ""]anchor the brace."))
 
 		anchored = !anchored

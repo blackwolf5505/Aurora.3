@@ -22,7 +22,7 @@
 	slices_num = 6
 	throw_range = 5
 	throwforce = 10
-	w_class = ITEMSIZE_NORMAL
+	w_class = WEIGHT_CLASS_NORMAL
 	filling_color = "#BD8939"
 	desc_extended = "The adhomian hard bread is type of tajaran bread, made from Blizzard Ears's flour, water and spice, usually basked in the shape of a loaf. \
 	It is known for its hard crust, bland taste and for being long lasting. The hard bread was usually prepared for long journeys, hard winters or military campaigns, \
@@ -418,8 +418,8 @@
 	icon = 'icons/obj/item/reagent_containers/food/cultural/tajara.dmi'
 	icon_state = "roast_dirtberries"
 	bitesize = 2
-	reagents_to_add = list(/singleton/reagent/nutriment = 4, /singleton/reagent/drink/syrup_caramel = 4)
-	reagent_data = list(/singleton/reagent/nutriment = list("warm crunchy nuts" = 2, "cinnamon" = 2), /singleton/reagent/drink/syrup_caramel = list("caramel" = 5))
+	reagents_to_add = list(/singleton/reagent/nutriment = 4, /singleton/reagent/condiment/syrup_caramel = 4)
+	reagent_data = list(/singleton/reagent/nutriment = list("warm crunchy nuts" = 2, "cinnamon" = 2), /singleton/reagent/condiment/syrup_caramel = list("caramel" = 5))
 	desc_extended = "A traditional snack consisting of oven-roasted dirtberries covered in a mixture of spice and caramel. These crunchy fruits are usually sold at outdoor festivals and events and are enjoyed for their warming effect and pleasant taste."
 	filling_color = "#BD8939"
 

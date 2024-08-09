@@ -247,7 +247,7 @@
 	set_stance(HOSTILE_STANCE_TIRED)
 	speak_audio()
 	stance_step = 0
-	walk(src, 0) //This stops the bear's walking
+	GLOB.move_manager.stop_looping(src) //This stops the bear's walking
 
 /mob/living/simple_animal/hostile/bear/spatial/tire_out()
 	..()
@@ -274,7 +274,7 @@
 			instant_aggro(1)
 
 
-/mob/living/simple_animal/hostile/bear/bullet_act(obj/item/projectile/P, def_zone)//Teleport around when shot, so its harder to burst it down with a carbine
+/mob/living/simple_animal/hostile/bear/bullet_act(obj/projectile/P, def_zone)//Teleport around when shot, so its harder to burst it down with a carbine
 	var/healthbefore = health
 	..()
 	spawn(1)
@@ -320,7 +320,7 @@
 		if (stance > HOSTILE_STANCE_ALERT)//If we're currently above alert
 			set_stance(HOSTILE_STANCE_ALERT)//Drop to alert and cease attacking
 		target_mob = null
-		walk(src, 0)
+		GLOB.move_manager.stop_looping(src)
 
 /mob/living/simple_animal/hostile/bear/AttackingTarget()
 	var/targetname = target_mob.name
@@ -393,14 +393,14 @@
 //This is triggered randomly periodically by the bear
 /mob/living/simple_animal/hostile/bear/proc/growl_soft()
 	var/sound = pick(quiet_sounds)
-	playsound(src, sound, 50, 1,3, usepressure = 0)
+	playsound(src, sound, 50, 1,3, pressure_affected = 0)
 
 
 //Plays a loud sound from a selection of four
 //Played when bear is attacking or dies
 /mob/living/simple_animal/hostile/bear/proc/growl_loud()
 	var/sound = pick(loud_sounds)
-	playsound(src, sound, 85, 1, 5, usepressure = 0)
+	playsound(src, sound, 85, 1, 5, pressure_affected = 0)
 
 //A special bear subclass which is more powerful and has the ability to teleport around to seek out prey.
 //It dislikes other bears and refuses to cooperate with them. If two of them see each other, one or both will teleport away
@@ -508,7 +508,7 @@
 	forceMove(target)
 	spark_system.queue()
 
-/mob/living/simple_animal/hostile/bear/spatial/bullet_act(obj/item/projectile/P, def_zone)//Teleport around when shot, so its harder to burst it down with a carbine
+/mob/living/simple_animal/hostile/bear/spatial/bullet_act(obj/projectile/P, def_zone)//Teleport around when shot, so its harder to burst it down with a carbine
 	..(P, def_zone)
 	if (prob(P.damage*1.5))//Bear has a good chance of teleporting when shot, making it harder to burst down
 		teleport_tactical()

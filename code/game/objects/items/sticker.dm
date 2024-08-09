@@ -4,7 +4,7 @@
 	icon = 'icons/obj/sticker.dmi'
 	icon_state = "sticker"
 	item_flags = ITEM_FLAG_NO_BLUDGEON
-	w_class = ITEMSIZE_TINY
+	w_class = WEIGHT_CLASS_TINY
 	vis_flags = VIS_INHERIT_LAYER | VIS_INHERIT_DIR
 
 	var/datum/weakref/attached
@@ -62,14 +62,14 @@
 	to_chat(user, SPAN_NOTICE("You attach \the [src] to \the [A]."))
 	user.drop_from_inventory(src, A)
 	attached = WEAKREF(A)
-	A.vis_contents += src
+	A.add_vis_contents(src)
 
 /obj/item/sticker/proc/remove_sticker(var/mob/user)
 	user.put_in_hands(src)
 	var/atom/movable/attached_atom = attached.resolve()
 	if(attached_atom)
 		to_chat(user, SPAN_NOTICE("You remove \the [src] from \the [attached_atom]."))
-		attached_atom.vis_contents -= src
+		attached_atom.remove_vis_contents(src)
 		attached = null
 
 /obj/item/sticker/googly_eye

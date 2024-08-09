@@ -16,8 +16,8 @@
 
 	var/atom/print_loc
 
-	var/list/stored_material =  list(DEFAULT_WALL_MATERIAL = 0, MATERIAL_GLASS = 0)
-	var/list/storage_capacity = list(DEFAULT_WALL_MATERIAL = 0, MATERIAL_GLASS = 0)
+	var/list/stored_material =  list(DEFAULT_WALL_MATERIAL = 0, MATERIAL_GLASS = 0, MATERIAL_ALUMINIUM = 0, MATERIAL_PLASTIC = 0, MATERIAL_LEAD = 0)
+	var/list/storage_capacity = list(DEFAULT_WALL_MATERIAL = 0, MATERIAL_GLASS = 0, MATERIAL_ALUMINIUM = 0, MATERIAL_PLASTIC = 0, MATERIAL_LEAD = 0)
 	var/show_category = "All"
 
 	var/hacked = FALSE
@@ -179,7 +179,7 @@
 	usr.set_machine(src)
 	add_fingerprint(usr)
 
-	playsound(src, /singleton/sound_category/keyboard_sound)
+	playsound(src, /singleton/sound_category/keyboard_sound, 50)
 
 	if(action == "make")
 		var/multiplier = text2num(params["multiplier"])
@@ -242,11 +242,11 @@
 		else if((autolathe_flags & AUTOLATHE_BUSY))
 			process_queue_item()
 
-/// Used so that we don't try to add_overlay every tick the autolathe processes.
+/// Used so that we don't try to AddOverlays every tick the autolathe processes.
 /obj/machinery/autolathe/proc/start_processing_queue_item()
 	if(does_flick)
 		//Fancy autolathe animation.
-		add_overlay("process")
+		AddOverlays("process")
 	autolathe_flags |= AUTOLATHE_STARTED|AUTOLATHE_BUSY
 
 /obj/machinery/autolathe/proc/process_queue_item()
@@ -269,7 +269,7 @@
 
 	print_queue -= currently_printing
 	QDEL_NULL(currently_printing)
-	cut_overlay("process")
+	CutOverlays("process")
 	I.update_icon()
 	update_use_power(POWER_USE_IDLE)
 
@@ -290,6 +290,9 @@
 
 	storage_capacity[DEFAULT_WALL_MATERIAL] = mb_rating * 25000
 	storage_capacity[MATERIAL_GLASS] = mb_rating * 12500
+	storage_capacity[MATERIAL_ALUMINIUM] = mb_rating * 25000
+	storage_capacity[MATERIAL_PLASTIC] = mb_rating * 12500
+	storage_capacity[MATERIAL_LEAD] = mb_rating * 12500
 	build_time = 50 / man_rating
 	mat_efficiency = 1.1 - man_rating * 0.1 // Normally, price is 1.25 the amount of material, so this shouldn't go higher than 0.8. Maximum rating of parts is 3
 
@@ -361,7 +364,7 @@
 		var/obj/item/stack/material/sheet = eating
 		var/icon/load = icon(icon, "load")
 		load.Blend(sheet.material.icon_colour,ICON_MULTIPLY)
-		add_overlay(load)
+		AddOverlays(load)
 		CUT_OVERLAY_IN(load, 6)
 
 	if(istype(eating, /obj/item/stack))

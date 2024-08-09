@@ -8,9 +8,9 @@
 	contained_sprite = TRUE
 	worn_x_dimension = 64
 	worn_y_dimension = 64
-	force = 25
+	force = 31
 	armor_penetration = 50 // Narsie's blessing is strong. Also needed so the cult isn't obliterated by the average voidsuit with melee resistance.
-	w_class = ITEMSIZE_LARGE
+	w_class = WEIGHT_CLASS_BULKY
 	throwforce = 10
 	slot_flags = SLOT_BELT
 	edge = TRUE

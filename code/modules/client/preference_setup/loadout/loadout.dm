@@ -159,16 +159,16 @@ var/list/gear_datums = list()
 	var/list/player_valid_gear_choices = valid_gear_choices()
 	for(var/gear_name in pref.gear)
 		if(!gear_datums[gear_name])
-			to_chat(preference_mob, "<span class='warning'>You cannot have more than one of the \the [gear_name]</span>")
+			to_chat(preference_mob, SPAN_WARNING("You cannot have more than one of the \the [gear_name]"))
 			pref.gear -= gear_name
 		else if(!(gear_name in player_valid_gear_choices))
-			to_chat(preference_mob, "<span class='warning'>You cannot take \the [gear_name] as you are not whitelisted for the species.</span>")
+			to_chat(preference_mob, SPAN_WARNING("You cannot take \the [gear_name] as you are not whitelisted for the species."))
 			pref.gear -= gear_name
 		else
 			var/datum/gear/G = gear_datums[gear_name]
 			if(total_cost + G.cost > GLOB.config.loadout_cost)
 				pref.gear -= gear_name
-				to_chat(preference_mob, "<span class='warning'>You cannot afford to take \the [gear_name]</span>")
+				to_chat(preference_mob, SPAN_WARNING("You cannot afford to take \the [gear_name]"))
 			else
 				total_cost += G.cost
 
@@ -244,7 +244,8 @@ var/list/gear_datums = list()
 		var/available = (G.check_faction(pref.faction) \
 			&& (job && G.check_role(job.title)) \
 			&& G.check_culture(text2path(pref.culture)) \
-			&& G.check_origin(text2path(pref.origin)))
+			&& G.check_origin(text2path(pref.origin)) \
+			&& G.check_religion(pref.religion))
 		var/ticked = (G.display_name in pref.gear)
 		var/style = ""
 
@@ -298,6 +299,18 @@ var/list/gear_datums = list()
 				temp_html += "[O.name]"
 				origin_count++
 				if(origin_count == G.origin_restriction.len)
+					temp_html += ") "
+					break
+				else
+					temp_html += ", "
+
+		if(G.whitelisted)
+			temp_html += "</font><font size = 1>(Valid species: "
+			var/species_count = 0
+			for(var/valid_species in G.whitelisted)
+				temp_html += "[valid_species]"
+				species_count++
+				if(species_count == G.whitelisted.len)
 					temp_html += ") "
 					break
 				else
@@ -459,6 +472,13 @@ var/list/gear_datums = list()
 	var/faction
 
 	/**
+	 * A string of the religion that can use this item
+	 *
+	 * If left `null`, any religion can spawn with this item
+	 */
+	var/religion
+
+	/**
 	 * A `/list` of [/singleton/origin_item/culture] paths that can use this item
 	 */
 	var/list/singleton/origin_item/culture/culture_restriction
@@ -580,6 +600,12 @@ var/list/gear_datums = list()
 // arg should be a faction name string
 /datum/gear/proc/check_faction(var/faction_)
 	if((faction && faction_ && faction_ != "None" && faction_ != "Stellar Corporate Conglomerate") && (faction != faction_))
+		return FALSE
+	return TRUE
+
+// arg should be a religion name string
+/datum/gear/proc/check_religion(var/religion_)
+	if((religion && religion_) && (religion != religion_))
 		return FALSE
 	return TRUE
 

@@ -57,10 +57,9 @@
 			if(path.len && (get_dist(patient, path[path.len]) > 2)) // We have a path, but it's off
 				path = list()
 			if(!path.len && (get_dist(src, patient) > 1))
-				spawn(0)
-					path = AStar(loc, get_turf(patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30, id = botcard)
-					if(!path)
-						path = list()
+				path = get_path_to(src, patient, 30, 0, botcard.GetAccess())
+				if(!length(path))
+					path = list()
 			if(path.len)
 				icon_state = "medibots"
 				step_to(src, path[1])
@@ -352,7 +351,7 @@
 	desc = "A first aid kit with a robot arm permanently grafted to it."
 	icon = 'icons/mob/npc/aibots.dmi'
 	icon_state = "firstaid_arm"
-	w_class = ITEMSIZE_NORMAL
+	w_class = WEIGHT_CLASS_NORMAL
 	var/build_step = 0
 	var/created_name = "Medibot" //To preserve the name if it's a unique medbot I guess
 	var/obj/item/storage/firstaid/firstaid_item // store the firstaid type if it blows up

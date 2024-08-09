@@ -26,7 +26,7 @@
 	var/list/particle_catchers = list()
 
 	var/list/ignore_types = list(
-		/obj/item/projectile,
+		/obj/projectile,
 		/obj/effect,
 		/obj/structure/cable,
 		/obj/machinery/atmospherics,
@@ -418,7 +418,7 @@
 
 /obj/effect/fusion_em_field/proc/Radiate()
 	if(istype(loc, /turf))
-		for(var/atom/movable/AM in range(max(1,FLOOR(size/2)), loc))
+		for(var/atom/movable/AM in range(max(1,FLOOR(size/2, 1)), loc))
 
 			if(AM == src || AM == owned_core || !AM.simulated)
 				continue
@@ -463,7 +463,7 @@
 		//determine a random amount to actually react this cycle, and remove it from the standard pool
 		//this is a hack, and quite nonrealistic :(
 		for(var/reactant in react_pool)
-			react_pool[reactant] = rand(FLOOR(react_pool[reactant]/2),react_pool[reactant])
+			react_pool[reactant] = rand(FLOOR(react_pool[reactant]/2, 1),react_pool[reactant])
 			reactants[reactant] -= react_pool[reactant]
 			if(!react_pool[reactant])
 				react_pool -= reactant
@@ -582,7 +582,7 @@
 	STOP_PROCESSING(SSprocessing, src)
 	. = ..()
 
-/obj/effect/fusion_em_field/bullet_act(obj/item/projectile/Proj)
+/obj/effect/fusion_em_field/bullet_act(obj/projectile/Proj)
 	AddEnergy(Proj.damage)
 	update_icon()
 	return 0

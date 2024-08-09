@@ -1,6 +1,6 @@
 /datum/citizenship/none
 	name = CITIZENSHIP_NONE
-	description = "Not being a citizen of any state is a common situation for owned ipcs and dionae."
+	description = "Not being a citizen of any state is a common situation for owned IPCs and Dionae."
 
 /datum/citizenship/golden_deep
 	name = CITIZENSHIP_GOLDEN
@@ -14,6 +14,22 @@
 
 	job_species_blacklist = list(
 		"Consular Officer" = list(
+			SPECIES_HUMAN,
+			SPECIES_HUMAN_OFFWORLD,
+			SPECIES_DIONA,
+			SPECIES_DIONA_COEUS,
+			SPECIES_SKRELL,
+			SPECIES_SKRELL_AXIORI,
+			SPECIES_TAJARA,
+			SPECIES_TAJARA_MSAI,
+			SPECIES_TAJARA_ZHAN,
+			SPECIES_UNATHI,
+			SPECIES_VAURCA_WORKER,
+			SPECIES_VAURCA_WARRIOR,
+			SPECIES_VAURCA_BULWARK,
+			SPECIES_VAURCA_BREEDER
+		),
+		"Diplomatic Aide" = list(
 			SPECIES_HUMAN,
 			SPECIES_HUMAN_OFFWORLD,
 			SPECIES_DIONA,
