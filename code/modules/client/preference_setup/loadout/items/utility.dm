@@ -25,6 +25,7 @@
 /datum/gear/utility/purse
 	display_name = "purse"
 	description = "A small, fashionable bag typically worn over the shoulder."
+	slot = slot_back
 	path = /obj/item/storage/backpack/satchel/pocketbook/purse
 	flags = GEAR_HAS_NAME_SELECTION | GEAR_HAS_DESC_SELECTION | GEAR_HAS_COLOR_SELECTION
 
@@ -108,6 +109,13 @@
 	path = /obj/item/voidsuit_modkit/himeo
 	allowed_roles = list("Shaft Miner", "Operations Manager", "Engineer", "Atmospheric Technician", "Chief Engineer", "Engineering Apprentice", "Engineering Personnel", "Operations Personnel")
 	origin_restriction = list(/singleton/origin_item/origin/himeo, /singleton/origin_item/origin/ipc_himeo, /singleton/origin_item/origin/free_council)
+
+// See the IPC-exclusive tab for the human variant.
+/datum/gear/utility/assunzione_kit
+	display_name = "assunzionii voidsuit kit"
+	path = /obj/item/voidsuit_modkit/assunzione
+	allowed_roles = list("Research Director", "Scientist", "Xenoarchaeologist", "Xenobiologist", "Xenobotanist", "Lab Assistant", "Science Personnel")
+	origin_restriction = list(/singleton/origin_item/origin/assunzione, /singleton/origin_item/origin/ipc_assunzione)
 
 /datum/gear/utility/wheelchair/color
 	display_name = "wheelchair"
