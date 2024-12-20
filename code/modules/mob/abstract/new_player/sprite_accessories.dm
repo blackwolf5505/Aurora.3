@@ -1566,6 +1566,23 @@ Follow by example and make good judgement based on length which list to include 
 	icon_state = "hair_undercut5"
 	chatname = "unshaved hair"
 
+/datum/sprite_accessory/hair/undercuttiedshort
+	name = "Undercut tied Short"
+	icon_state = "hair_undercut_tied_short"
+	chatname = "unshaved hair"
+
+/datum/sprite_accessory/hair/undercuttiedmedium
+	name = "Undercut Tied Medium"
+	icon_state = "hair_undercut_tied_medium"
+	length = 2
+	chatname = "unshaved hair"
+
+/datum/sprite_accessory/hair/undercuttiedlong
+	name = "Undercut Tied Long"
+	icon_state = "hair_undercut_tied_long"
+	length = 3
+	chatname = "unshaved hair"
+
 /datum/sprite_accessory/hair/curtain
 	name = "Short Curtain"
 	icon_state = "hair_curtain"
