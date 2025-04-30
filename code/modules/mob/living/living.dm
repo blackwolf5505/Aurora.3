@@ -8,9 +8,7 @@
 
 	return
 
-//mob verbs are faster than object verbs. See above.
-var/mob/living/next_point_time = 0
-/mob/living/pointed(atom/A as mob|obj|turf in view())
+/mob/living/_pointed(atom/pointing_at)
 	if(src.stat || src.restrained())
 		return FALSE
 	if(src.status_flags & FAKEDEATH)
@@ -19,7 +17,7 @@ var/mob/living/next_point_time = 0
 	. = ..()
 
 	if(.)
-		visible_message("<b>\The [src]</b> points to \the [A].")
+		visible_message("<b>\The [src]</b> points to \the [pointing_at].")
 
 /mob/living/drop_from_inventory(var/obj/item/W, var/atom/target)
 	. = ..(W, target)
@@ -349,7 +347,7 @@ default behaviour is:
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 /mob/proc/get_contents()
-
+	return list()
 
 //Recursive function to find everything a mob is holding.
 /mob/living/get_contents(var/obj/item/storage/Storage = null)
@@ -390,6 +388,7 @@ default behaviour is:
 				L += get_contents(D.wrapped)
 		return L
 
+/// Returns TRUE if mob has obj of A type anywhere in its contents.
 /mob/living/proc/check_contents_for(A)
 	var/list/L = src.get_contents()
 
@@ -669,6 +668,11 @@ default behaviour is:
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
+
+	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(execute_resist)))
+
+///proc extender of [/mob/living/verb/resist] meant to make the process queable if the server is overloaded when the verb is called
+/mob/living/proc/execute_resist()
 
 	if(!incapacitated(INCAPACITATION_KNOCKOUT) && canClick())
 		resist_grab()

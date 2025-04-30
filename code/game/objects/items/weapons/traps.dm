@@ -265,7 +265,7 @@
 
 		//Give a simple message and return if it's not a human
 		if(!ishuman(L))
-			L.visible_message(SPAN_DANGER("You step on \the [src]!"))
+			L.visible_message(SPAN_DANGER("[L] steps on \the [src]!"))
 			return
 
 		var/mob/living/carbon/human/human = L
@@ -670,7 +670,7 @@
 		..()
 
 /obj/item/trap/animal/Move()
-	..()
+	. = ..()
 	if(captured)
 		var/datum/M = captured.resolve()
 		if(isliving(M))
